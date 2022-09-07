@@ -30,7 +30,7 @@ end
 
 def show_students
   print_header
-  print_students_list
+  print_student_list
   print_footer
 end
   
@@ -64,8 +64,6 @@ def print_footer
   puts "Overall, we have #{@students.count} great students"
 end
 
-interactive_menu
-
 def save_students
   file = File.open("students.csv", "w")
   @students.each do |student|
@@ -75,3 +73,5 @@ def save_students
   end
   file.close
 end
+
+interactive_menu
