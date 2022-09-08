@@ -1,4 +1,6 @@
 @students = []
+require 'csv'
+
 
 def input_students
   while true do 
@@ -13,7 +15,7 @@ def input_students
     puts "How tall are they? Please enter by CM digits"
     height = gets.chomp
 
-  @students << {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
+    add_students(name, cohort, hobbies, country_of_birth, height)
 
     puts "Now we have #{@students.count} students. Would you like to add another student? Y / N"
     more = gets.chomp
@@ -81,9 +83,9 @@ def print_student_list
 end
 
 def print_footer
-  if @students.count > 1
+  if @students.count > 1 
     puts "Overall, we have #{@students.count} great students".center(150)
-    else
+  else 
     puts "Overall, we have #{@students.count} great student.".center(150)
   end
 end
@@ -91,8 +93,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list"
+  puts "4. Load the list"
   puts "9. Exit"
 end
 
@@ -111,12 +113,16 @@ end
 def process(selection)
   case selection
     when "1"
+      puts "Action Succesful"
       input_students
     when "2"
+      puts "Action Succesful"
       show_students
     when "3"
+      puts
       save_students
     when "4"
+      puts 
       load_students
     when "9"
       exit
@@ -126,22 +132,27 @@ def process(selection)
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  puts "Please enter the filename of the file you would like to save to"
+  filename = gets.chomp
+  CSV.open(filename, "w") do |csv| 
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    csv << [student[:name], student[:cohort], student[:hobbies], student[:country_of_birth], student[:height]]
   end
-  file.close
+  puts "#{filename} saved successfully."
+end
 end
 
 def load_students
-  file = File.open("students.csv", "r")
-  file.readlines.each do |line|
-  name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
+  puts "Please enter the filename of the file you would like to open"
+  filename = gets.chomp
+  CSV.foreach(filename, "r") do |line|
+   name, cohort, hobbies, country_of_birth, height = line
+  add_students(name, cohort, hobbies, country_of_birth, height)
   end
-  file.close
+end
+
+def add_students(name, cohort, hobbies, country_of_birth, height)
+  @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
 end
 
 
