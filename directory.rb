@@ -1,25 +1,24 @@
 @students = []
 
 def input_students
-
   while true do 
-  puts "Please enter the names of the students"
-  name = gets.tr("\n","")
-  puts "What cohort are they in? Please enter by digit 1-12"
-  cohort = cohort_method
-  puts "What are their hobbies?"
-  hobbies = gets.chomp
-  puts "What country were they born in?"
-  country_of_birth = gets.chomp
-  puts "How tall are they? Please enter by CM digits"
-  height = gets.chomp
+    puts "Please enter the names of the students"
+    name = gets.tr("\n","")
+    puts "What cohort are they in? Please enter by digit 1-12"
+    cohort = cohort_method
+    puts "What are their hobbies?"
+    hobbies = gets.chomp
+    puts "What country were they born in?"
+    country_of_birth = gets.chomp
+    puts "How tall are they? Please enter by CM digits"
+    height = gets.chomp
 
   @students << {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
 
     puts "Now we have #{@students.count} students. Would you like to add another student? Y / N"
     more = gets.chomp
-    break if more == "N"
-  end
+      break if more == "N"
+      end
   @students
 end
 
@@ -61,19 +60,19 @@ def cohort_method
 end 
 
 def print_header
-  puts "The Students of Villains Academy".center(100)
-  puts "-------------".center(100)
+  puts "The Students of Villains Academy".center(150)
+  puts "-------------".center(150)
 end
 
-def print(students)
+def print_student_list
   cohort_groups = []
   print_header
   @students.map do |each_student| unless cohort_groups.include?(each_student[:cohort]) 
   cohort_groups << each_student[:cohort]
   cohort_groups.each do |cohort| 
-    puts cohort.to_s.upcase.center(100)
+    puts cohort.to_s.upcase.center(150)
       @students.each_with_index do |student, index| if student[:cohort] == cohort && student[:name] != ""
-        puts "#{index+1}. #{student[:name]}. Enjoys #{student[:hobbies]}. Was born in #{student[:country_of_birth]} and is #{student[:height]} cm's tall.".center(100)
+        puts "#{index+1}. #{student[:name]}. Enjoys #{student[:hobbies]}. Was born in #{student[:country_of_birth]} and is #{student[:height]} cm's tall.".center(150)
       end
     end
   end
@@ -81,41 +80,43 @@ def print(students)
   end
 end
 
-def print_footer(students)
+def print_footer
   if @students.count > 1
-    puts "Overall, we have #{@students.count} great students".center(100)
+    puts "Overall, we have #{@students.count} great students".center(150)
     else
-    puts "Overall, we have #{@students.count} great student.".center(100)
+    puts "Overall, we have #{@students.count} great student.".center(150)
   end
 end
 
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
 
-  # 2. read the input and save it into a variable
-  # 3. do what the user has asked
-  # 4. repeat from step 1
+def show_students 
+  print_student_list
+  print_footer
+end
 
-  def interactive_menu
-    students = []
-    loop do
-      # 1. print the menu and ask the user what to do
-      puts "1. Input the students"
-      puts "2. Show the students"
-      puts "9. Exit" # 9 because we'll be adding more items
-      # 2. read the input and save it into a variable
-      selection = gets.chomp
-      # 3. do what the user has asked
-      case selection
-      when "1"
-        students = input_students
-      when "2"
-        print(students)
-        print_footer(students)
-      when "9"
-        exit # this will cause the program to terminate
-      else
-        puts "I don't know what you meant, try again"
-      end
-    end
+def interactive_menu
+  loop do 
+    print_menu
+    process(gets.chomp)
   end
+end
 
-  interactive_menu
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
+  end
+end
+
+interactive_menu
